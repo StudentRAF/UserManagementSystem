@@ -39,7 +39,7 @@ public class Permissions {
         return new Permissions(flags);
     }
 
-    public static Permissions of(Permissions permissions) {
+    public static Permissions of(Permissions... permissions) {
         return new Permissions(permissions);
     }
 
