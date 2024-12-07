@@ -1,19 +1,38 @@
 package rs.raf.student.ums.type;
 
+import rs.raf.student.ums.configuration.UMSConfiguration;
+
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Permissions {
 
-    public static final Permissions NONE       = Permissions.of(0);
-    public static final Permissions ALL        = Permissions.of(0xFFFFFFFF); //NOTE: don't be lazy ;)
-    public static final Permissions CAN_READ   = Permissions.of(1 << 0);
-    public static final Permissions CAN_CREATE = Permissions.of(1 << 1);
-    public static final Permissions CAN_UPDATE = Permissions.of(1 << 2);
-    public static final Permissions CAN_DELETE = Permissions.of(1 << 3);
+    public static final Permissions NONE       = Permissions.of(UMSConfiguration.Permission.NONE,       0     );
+    public static final Permissions CAN_READ   = Permissions.of(UMSConfiguration.Permission.CAN_READ,   1 << 0);
+    public static final Permissions CAN_CREATE = Permissions.of(UMSConfiguration.Permission.CAN_CREATE, 1 << 1);
+    public static final Permissions CAN_UPDATE = Permissions.of(UMSConfiguration.Permission.CAN_UPDATE, 1 << 2);
+    public static final Permissions CAN_DELETE = Permissions.of(UMSConfiguration.Permission.CAN_DELETE, 1 << 3);
 
-    private Integer flags;
+    private static final Map<String, Permissions> permissionsNameMap = Map.of(
+        CAN_READ.name(),   CAN_READ,
+        CAN_CREATE.name(), CAN_CREATE,
+        CAN_UPDATE.name(), CAN_UPDATE,
+        CAN_DELETE.name(), CAN_DELETE
+    );
+
+    private static final Map<Integer, Permissions> permissionsFlagMap = Map.of(
+        CAN_READ.flags(),   CAN_READ,
+        CAN_CREATE.flags(), CAN_CREATE,
+        CAN_UPDATE.flags(), CAN_UPDATE,
+        CAN_DELETE.flags(), CAN_DELETE
+    );
+
+    private       Integer flags;
+    private final String  name;
 
     //region Constructors
 
@@ -23,10 +42,22 @@ public class Permissions {
 
     public Permissions(Integer flags) {
         this.flags = flags;
+        this.name  = null;
     }
 
     public Permissions(Permissions... permissions) {
         this(0);
+
+        add(permissions);
+    }
+
+    private Permissions(String name, Integer flags) {
+        this.name  = name;
+        this.flags = flags;
+    }
+
+    private Permissions(String name, Permissions... permissions) {
+        this(name, 0);
 
         add(permissions);
     }
@@ -43,13 +74,24 @@ public class Permissions {
         return new Permissions(permissions);
     }
 
+    private static Permissions of(String name, Integer flags) {
+        return new Permissions(name, flags);
+    }
+
+    private static Permissions of(String name, Permissions... permissions) {
+        return new Permissions(name, permissions);
+    }
+
+    public static Permissions find(String... names) {
+        return Permissions.of(Arrays.stream(names)
+                                    .map(permissionsNameMap::get)
+                                    .filter(Objects::nonNull)
+                                    .toArray(Permissions[]::new));
+    }
+
     //endregion Constructors
 
     //region Data
-
-    public Integer flags() {
-        return flags;
-    }
 
     public Permissions add(Permissions... permissions) {
         Arrays.stream(permissions)
@@ -72,10 +114,33 @@ public class Permissions {
         return this;
     }
 
+    public boolean has(Permissions requiredPermissions) {
+        return requiredPermissions.equals(NONE) || (flags & requiredPermissions.flags()) > 0;
+    }
+
     public Permissions clear() {
-        flags = 0;
+        flags = NONE.flags();
 
         return this;
+    }
+
+    private String name() {
+        return name;
+    }
+
+    public Integer flags() {
+        return flags;
+    }
+
+    public Set<String> names() {
+        if (Objects.equals(flags, NONE.flags()))
+            return Set.of(NONE.name());
+
+        return permissionsFlagMap.values()
+                                 .stream()
+                                 .filter(this::has)
+                                 .map(Permissions::name)
+                                 .collect(Collectors.toSet());
     }
 
     //endregion Data

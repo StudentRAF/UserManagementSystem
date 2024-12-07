@@ -16,6 +16,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import rs.raf.student.ums.converter.PermissionConverter;
 import rs.raf.student.ums.type.Permissions;
@@ -24,7 +25,7 @@ import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -164,10 +165,12 @@ public class User implements UserDetails {
     
     //region UserDetails
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Set.of(); //TODO: add permissions
+        return permissions.names()
+                          .stream()
+                          .map(SimpleGrantedAuthority::new)
+                          .collect(Collectors.toSet());
     }
 
     @Override
