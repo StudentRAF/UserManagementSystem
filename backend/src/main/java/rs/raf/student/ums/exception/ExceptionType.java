@@ -8,6 +8,21 @@ import rs.raf.student.ums.logger.Severity;
 @AllArgsConstructor
 public enum ExceptionType implements IException {
 
+    FIND_USER_NOT_FOUND_ID("""
+                          Could not find user. User with id "{0}" does not exist.\
+                          """, Severity.DEBUG, HttpStatus.NOT_FOUND),
+
+    UPDATE_USER_NOT_FOUND_ID("""
+                             Could not update user. User with id "{0}" does not exist.\
+                             """, Severity.DEBUG, HttpStatus.NOT_FOUND),
+
+    DELETE_USER_NOT_FOUND_ID("""
+                             Could not delete user. User with id "{0}" does not exist.\
+                             """, Severity.DEBUG, HttpStatus.NOT_FOUND),
+
+    GENERATE_AUTHORIZATION_TOKEN_NOT_FOUND_AUTHENTICATED_USER("""
+                                                              Could not generate authentication token. There is no authenticated user.\
+                                                              """, Severity.DEBUG, HttpStatus.NOT_FOUND),
     ;
 
     private final String     pattern;
