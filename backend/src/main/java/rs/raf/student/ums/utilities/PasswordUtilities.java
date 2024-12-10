@@ -18,7 +18,7 @@ public class PasswordUtilities {
         return encodeBase64(salt);
     }
 
-    public static String hashPassword(String password, String salt) {
+        public static String hashPassword(String password, String salt) {
         return encodeBase64(DigestUtils.sha256(password + salt));
     }
 

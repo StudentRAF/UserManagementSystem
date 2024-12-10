@@ -138,14 +138,14 @@ public class UMSConfiguration {
 
                 public static final String BEEN_NAME = Endpoint.BEEN_NAME + SEPARATOR + "user";
 
-                private static final String BASE    = "/users";
-                public static final String  GET_ALL = BASE;
-                public static final String  GET_ONE = BASE + "/{id}";
-                public static final String  LOGIN   = BASE + "/login";
-                public static final String  CREATE  = BASE;
-                public static final String  UPDATE  = BASE + "/{id}";
-                public static final String  PATCH   = BASE + "/{id}";
-                public static final String  DELETE  = BASE + "/{id}";
+                public static final String BASE    = "/users";
+                public static final String GET_ALL = BASE;
+                public static final String GET_ONE = BASE + "/{id}";
+                public static final String LOGIN   = BASE + "/login";
+                public static final String CREATE  = BASE;
+                public static final String UPDATE  = BASE + "/{id}";
+                public static final String PATCH   = BASE + "/{id}";
+                public static final String DELETE  = BASE + "/{id}";
 
             }
 
@@ -166,10 +166,10 @@ public class UMSConfiguration {
                 public static final Permissions GET_ALL = Permissions.of(Permissions.CAN_READ);
                 public static final Permissions GET_ONE = Permissions.of(Permissions.CAN_READ);
                 public static final Permissions LOGIN   = Permissions.of(Permissions.NONE);
-                public static final Permissions CREATE  = Permissions.of(Permissions.CAN_READ, Permissions.CAN_CREATE);
-                public static final Permissions UPDATE  = Permissions.of(Permissions.CAN_READ, Permissions.CAN_UPDATE);
-                public static final Permissions PATCH   = Permissions.of(Permissions.CAN_READ, Permissions.CAN_UPDATE);
-                public static final Permissions DELETE  = Permissions.of(Permissions.CAN_READ, Permissions.CAN_DELETE);
+                public static final Permissions CREATE  = Permissions.of(Permissions.CAN_CREATE);
+                public static final Permissions UPDATE  = Permissions.of(Permissions.CAN_UPDATE);
+                public static final Permissions PATCH   = Permissions.of(Permissions.CAN_UPDATE);
+                public static final Permissions DELETE  = Permissions.of(Permissions.CAN_DELETE);
 
             }
 

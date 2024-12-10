@@ -8,9 +8,12 @@ import rs.raf.student.ums.logger.Severity;
 @AllArgsConstructor
 public enum ExceptionType implements IException {
 
-    FIND_USER_NOT_FOUND_ID("""
-                          Could not find user. User with id "{0}" does not exist.\
-                          """, Severity.DEBUG, HttpStatus.NOT_FOUND),
+    FIND_USER_NOT_FOUND_ID    ("""
+                              Could not find user. User with id "{0}" does not exist.\
+                              """, Severity.DEBUG, HttpStatus.NOT_FOUND),
+    FIND_USER_NOT_FOUND_EMAIL("""
+                              Could not find user. User with email "{0}" does not exist.\
+                              """, Severity.DEBUG, HttpStatus.NOT_FOUND),
 
     UPDATE_USER_NOT_FOUND_ID("""
                              Could not update user. User with id "{0}" does not exist.\

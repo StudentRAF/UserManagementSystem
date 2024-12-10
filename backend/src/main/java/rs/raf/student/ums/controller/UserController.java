@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,7 +41,14 @@ public class UserController {
 
     @PostMapping(User.LOGIN)
     public ResponseEntity<UserGetDto> login(@RequestBody @Valid UserLoginDto loginDto) {
-        return ExceptionUtils.handleResponse(() -> new ResponseEntity<>(service.login(loginDto), HttpStatus.OK));
+        return ExceptionUtils.handleResponse(() -> {
+            UserGetDto userGetDto = service.login(loginDto);
+            String     token      = service.authorizationToken();
+
+            return ResponseEntity.status(HttpStatus.OK)
+                                 .header(HttpHeaders.AUTHORIZATION, token)
+                                 .body(userGetDto);
+        });
     }
 
     @PostMapping(User.CREATE)

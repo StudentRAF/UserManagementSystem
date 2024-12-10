@@ -1,5 +1,8 @@
 package rs.raf.student.ums.type;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import rs.raf.student.ums.adapter.PermissionsAdapter;
 import rs.raf.student.ums.configuration.UMSConfiguration;
 
 import java.text.MessageFormat;
@@ -9,6 +12,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@JsonSerialize(using = PermissionsAdapter.Serializer.class)
+@JsonDeserialize(using = PermissionsAdapter.Deserializer.class)
 public class Permissions {
 
     public static final Permissions NONE       = Permissions.of(UMSConfiguration.Permission.NONE,       0     );
@@ -141,6 +146,10 @@ public class Permissions {
                                  .filter(this::has)
                                  .map(Permissions::name)
                                  .collect(Collectors.toSet());
+    }
+
+    public String[] namesArray() {
+        return names().toArray(String[]::new);
     }
 
     //endregion Data

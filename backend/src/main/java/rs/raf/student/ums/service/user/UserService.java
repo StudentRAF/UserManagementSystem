@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +32,8 @@ import static rs.raf.student.ums.exception.ExceptionType.UPDATE_USER_NOT_FOUND_I
 @ExtensionMethod({UserMapper.class})
 public class UserService implements IUserService {
 
-    private final IUserRepository repository;
+    private final IUserRepository       repository;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public Page<UserGetDto> findAll(Pageable pageable) throws UMSException {
@@ -46,7 +50,12 @@ public class UserService implements IUserService {
 
     @Override
     public UserGetDto login(UserLoginDto loginDto) throws UMSException {
-        return null; //TODO
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return ((User) authentication.getPrincipal()).mapDto();
+
     }
 
     @Override

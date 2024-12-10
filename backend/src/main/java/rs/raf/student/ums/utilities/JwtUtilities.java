@@ -50,7 +50,7 @@ public class JwtUtilities {
         return generateToken.apply(user);
     }
 
-    public static String extractUsername(String token) {
+    public static String extractEmail(String token) {
         return parseToken.apply(removeAuthenticationScheme(token))
                          .getPayload()
                          .getSubject();
