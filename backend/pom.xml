@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>rs.raf.student</groupId>
-	<artifactId>user-management-system</artifactId>
+	<artifactId>food-ordering-system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>UserManagementSystem</name>
